@@ -1,0 +1,172 @@
+.container {
+
+    display: flex;
+    font-family: "Inter";
+}
+
+.left-panel {
+
+    height: 100vh;
+    width: 20vw;
+    background-color: white;
+
+}
+
+.bnt-chat {
+
+    width: 100%;
+    background-color: transparent;
+    padding: 10px;
+    color: black;
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+.central-panel {
+
+    margin-top: 160px;
+    height: 80vh;
+    width: 80vw;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 100px;
+}
+
+
+.texs {
+
+    display: flex;
+    gap: 70px;
+
+    
+
+}
+
+.texs h1 {
+
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.central-imgs {
+
+    height: 40px;
+    width: 40px;
+
+
+}
+
+.texs p {
+
+    background-color: #f0f3f6;
+
+}
+
+.top {
+
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-direction: column;
+
+
+}
+
+.left-panel .new-chat {
+
+    width: 350px;
+    height: 50px;
+    border-radius: 12px;
+    margin-top: -400px;
+    background-color: #1C1C1C;
+    color: white;
+    font-size: 24px;
+    border-color: dimgray;
+    text-align: center;
+}
+
+.top button:nth-child(n+2) {
+
+    width: 350px;
+    height: 48px;
+    background-color: transparent;
+    border: none;
+    text-align: start;
+    font-size: 17px;
+    font-weight: 400;
+
+}
+
+.bottom {
+
+    display: flex;
+    width: 100%;
+    height: 30%;
+    flex-direction: column;
+    justify-content: space-around;
+    
+    
+}
+
+.left-panel button {
+
+    background: none;
+    border: none;
+    color:  black;
+    padding: 10px;
+    text-align: left;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    
+
+}
+
+input {
+
+    background-color: white;
+    padding: 16, 20, 16, 20;
+    border-radius: 8px;
+
+}
+
+.input-conteiner {
+
+    margin-top: auto;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+
+    border: none;
+    background-color: #f7f9fb;
+
+    border-radius: 16px;
+
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.input-conteiner input {
+
+    border: none;
+    padding: 20px;
+    background-color: transparent;
+    width: 40vw;
+
+}

@@ -48,8 +48,13 @@
 5. Dentro da pasta “assets”, remova qualquer arquivo que exista lá dentro.
 
 6. Agora dentro do "assets", crie essas pastas:
+   
   a. imgs
+
   b. styles (Pode colocar o "global" dentro dele)
+
+(Caso fique assim: "imgs/assets", Voce errou em "algo", ache o erro)
 
 ## Agora temos o projeto limpo para ser iniciado!
 
+# 3° Parte

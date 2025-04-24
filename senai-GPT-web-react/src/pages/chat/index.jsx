@@ -8,8 +8,47 @@ import ArrowImg from "../../assets/imgs/ArrowSquareOut.svg";
 import ExitImg from "../../assets/imgs/Vector.svg";
 import Logo from "../../assets/imgs/Chat.png";
 import Examples from "../../assets/imgs/Vector (3).svg";
+import Capabiliti from "../../assets/imgs/Star.svg";
+import Limitation from "../../assets/imgs/ShieldWarning.svg";
+import IconMicrofone from "../../assets/imgs/IconSet.svg";
+import IconImagem from "../../assets/imgs/Vector (1).svg";
+import ImgEnter from "../../assets/imgs/Vector (2).svg";
+import { useEffect, useState } from "react";
 
 function Chat() {
+
+    const [chats, setChats] = useState([]);
+
+    useEffect(() => {
+        // Executada toda vez que abre a tela.
+        getChats();
+
+    }, []);
+
+    const getChats = async () => {
+        //Arrow Function
+        let response = await fetch("https://senai-gpt-api.azurewebsites.net/Chats", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("meuToken")
+            }
+        });
+
+        console.log(response);
+
+        if (response.ok == true) {
+
+            let json = await response.json(); // Pega as informacoes dos chats.
+
+            setChats(json);
+
+        } else {
+
+            alert("Token invalido. Faca login novamente.")
+            window.location.href = "/login";
+
+        }
+
+    }
 
     return (
         <>
@@ -22,29 +61,24 @@ function Chat() {
 
                         <button className="new-chat">+ New chat</button>
 
-                        <button className="bnt-chat">
+                        {chats.map(chat => (
+                            <button className="bnt-chat">
                             <img src={ChatText} alt="Balao de texto" />
-                            AI Chat Tool Ethics
+                            {chat.chatTitle}
                         </button>
-                        <button className="bnt-chat">
-                            <img src={ChatText} alt="Balao de texto" />
-                            Al Chat Tool Impact Writing
-                        </button>
-                        <button className="bnt-chat">
-                            <img src={ChatText} alt="Balao de texto" />
-                            New chat
-                        </button>
-
+                        ))}
+                        
+                        
                     </div>
 
                     <div className="bottom">
 
                         <button className="input-conteiner">
-                        <img src={Trash} alt="img Lixo" />
+                            <img src={Trash} alt="img Lixo" />
                             Clear conversations
                         </button>
                         <button className="input-conteiner">
-                        <img src={Sun} alt="img sol" />
+                            <img src={Sun} alt="img sol" />
                             Light mode
                         </button>
                         <button className="input-conteiner">
@@ -87,7 +121,7 @@ function Chat() {
                         <div className="capabili">
 
                             <h1>
-                                <img className="central-imgs" src={Examples} alt="" />
+                                <img className="central-imgs" src={Capabiliti} alt="" />
                                 Capabilities
                             </h1>
                             <p>Remembers what user saidearlier in the conversation.</p>
@@ -98,7 +132,7 @@ function Chat() {
 
                         <div className="limit">
                             <h1>
-                                <img className="central-imgs" src={Examples} alt="" />
+                                <img className="central-imgs" src={Limitation} alt="" />
                                 Limitations
                             </h1>
                             <p>May occasionally generate incorrect information.</p>
@@ -110,13 +144,13 @@ function Chat() {
                     </div>
 
                     <div className="input-conteiner">
-                        <img src="../assets/imgs/IconSet.svg" alt="Icon Microfone" />
+                        <img src={IconMicrofone} alt="Icon Microfone" />
 
-                        <img src="../assets/imgs/Vector (1).svg" alt="Icon Imagem" />
+                        <img src={IconImagem} alt="Icon Imagem" />
 
                         <input placeholder="Type mensage." type="text" />
 
-                        <img src="../assets/imgs/Vector (2).svg" alt="" />
+                        <img src={ImgEnter} alt="Img Enter" />
 
                     </div>
 

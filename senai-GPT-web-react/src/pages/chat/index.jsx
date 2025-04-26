@@ -18,6 +18,9 @@ import { useEffect, useState } from "react";
 function Chat() {
 
     const [chats, setChats] = useState([]);
+    const [chatSelecionado, setChatSelecionado] = useState(null);
+
+    const [userMessage, setUserMessage] = useState("");
 
     useEffect(() => {
         // Executada toda vez que abre a tela.
@@ -50,6 +53,83 @@ function Chat() {
 
     }
 
+    const onLogOutClick = () => {
+
+        localStorage.clear();
+        window.location.href = "/login";
+
+    }
+
+    const clickChat = (chat) => {
+        setChatSelecionado(chat);
+        console.log(chat)
+    }
+
+    const chatGPT = async (message) => {
+
+          // Configurações do endpoint e chave da API
+          const endpoint = "https://ai-testenpl826117277026.openai.azure.com/";
+          const apiKey = "";
+          const deploymentId = "gpt-4"; // Nome do deployment no Azure OpenAI
+          const apiVersion = "2024-05-01-preview"; // Verifique a versão na documentação
+  
+          // URL para a chamada da API
+          const url = `${endpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=${apiVersion}`;
+  
+          // Configurações do corpo da requisição
+          const data = {
+              messages: [{ role: "user", content: message }],
+              max_tokens: 50
+          };
+  
+          // Cabeçalhos da requisição
+          const headers = {
+              "Content-Type": "application/json",
+              "api-key": apiKey
+          };
+  
+          // Faz a requisição com fetch
+          const response = await fetch(url, {
+              method: "POST",
+              headers: headers,
+              body: JSON.stringify(data)
+          });
+  
+          if (response.ok) {
+              const result = await response.json();
+              const botMessage = result.choices[0].message.content;
+              return botMessage;
+          }
+  
+    }
+
+    const enviarMensagem = async (message) => {
+
+        let resposta = await chatGPT(message);
+
+        console.log("resposta: ", resposta)
+
+        let novaMensagemUsuairo = {
+
+            userId: "userId",
+            text: message,
+            id: 10
+        };
+
+        let novaRespostaChatGPT = {
+            userId: "chatbot",
+            text: resposta,
+            id: 10
+        };
+
+        let novoChatSelecionado = { ...chatSelecionado };
+
+        novoChatSelecionado.messages.push(novaMensagemUsuairo);
+        novoChatSelecionado.messages.push(novaRespostaChatGPT);
+
+        setChatSelecionado(novoChatSelecionado);
+    }
+
     return (
         <>
 
@@ -62,13 +142,12 @@ function Chat() {
                         <button className="new-chat">+ New chat</button>
 
                         {chats.map(chat => (
-                            <button className="bnt-chat">
-                            <img src={ChatText} alt="Balao de texto" />
-                            {chat.chatTitle}
-                        </button>
+                            <button className="bnt-chat" onClick={() => clickChat(chat)} >
+                                <img src={ChatText} alt="Balao de texto" />
+                                {chat.chatTitle}
+                            </button>
                         ))}
-                        
-                        
+
                     </div>
 
                     <div className="bottom">
@@ -89,7 +168,7 @@ function Chat() {
                             <img src={ArrowImg} alt="img arrow" />
                             Updates & FAQ
                         </button>
-                        <button className="input-conteiner">
+                        <button className="input-conteiner" onClick={() => onLogOutClick()}>
                             <img src={ExitImg} alt="img Sair" />
                             Log out
                         </button>
@@ -102,55 +181,98 @@ function Chat() {
 
                 <main className="central-panel">
 
-                    <img className="img-panel" src={Logo} alt="Logo Senai-GPT" />
+                    {chatSelecionado == null && (
 
-                    <div className="texs">
+                        <>
 
-                        <div className="example">
+                            <img className="img-panel" src={Logo} alt="Logo Senai-GPT" />
 
-                            <h1>
-                                <img className="central-imgs" src={Examples} alt="" />
-                                Examples
-                            </h1>
-                            <p>"Explain quantum computing insimple terms"</p>
-                            <p>"Got any creative ideas for a 10year old's birthday?"</p>
-                            <p>"How do I make an HTTP requestin Javascript?"</p>
+                            <div className="texs">
 
-                        </div>
+                                <div className="example">
 
-                        <div className="capabili">
+                                    <h1>
+                                        <img className="central-imgs" src={Examples} alt="" />
+                                        Examples
+                                    </h1>
+                                    <p>"Explain quantum computing insimple terms"</p>
+                                    <p>"Got any creative ideas for a 10year old's birthday?"</p>
+                                    <p>"How do I make an HTTP requestin Javascript?"</p>
 
-                            <h1>
-                                <img className="central-imgs" src={Capabiliti} alt="" />
-                                Capabilities
-                            </h1>
-                            <p>Remembers what user saidearlier in the conversation.</p>
-                            <p>Allows user to provide follow-up corrections.</p>
-                            <p>Trained to decline inappropriate requests.</p>
+                                </div>
 
-                        </div>
+                                <div className="capabili">
 
-                        <div className="limit">
-                            <h1>
-                                <img className="central-imgs" src={Limitation} alt="" />
-                                Limitations
-                            </h1>
-                            <p>May occasionally generate incorrect information.</p>
-                            <p>May occasionally produce harmful instructions or biased content.</p>
-                            <p>Limited knowledge of world andevents after 2021.</p>
-                        </div>
+                                    <h1>
+                                        <img className="central-imgs" src={Capabiliti} alt="" />
+                                        Capabilities
+                                    </h1>
+                                    <p>Remembers what user saidearlier in the conversation.</p>
+                                    <p>Allows user to provide follow-up corrections.</p>
+                                    <p>Trained to decline inappropriate requests.</p>
+
+                                </div>
+
+                                <div className="limit">
+                                    <h1>
+                                        <img className="central-imgs" src={Limitation} alt="" />
+                                        Limitations
+                                    </h1>
+                                    <p>May occasionally generate incorrect information.</p>
+                                    <p>May occasionally produce harmful instructions or biased content.</p>
+                                    <p>Limited knowledge of world andevents after 2021.</p>
+                                </div>
 
 
-                    </div>
+                            </div>
+
+
+                        </>
+
+                    )}
+
+                    {chatSelecionado != null && (
+
+                        <>
+
+                            <div className="chat-container">
+
+                                <div className="chat-header">
+
+                                    <h2>{chatSelecionado.chatTitle}</h2>
+
+                                </div>
+
+                                <div className="chat-messages">
+
+                                    {chatSelecionado.messages.map(message => (
+
+                                        <p className={"message-item " + (message.userId == "chatbot" ? "chatbot" : "")} >{message.text}</p>
+
+                                    ))}
+
+                                </div>
+
+                            </div>
+
+                        </>
+
+                    )}
+
 
                     <div className="input-conteiner">
                         <img src={IconMicrofone} alt="Icon Microfone" />
 
                         <img src={IconImagem} alt="Icon Imagem" />
 
-                        <input placeholder="Type mensage." type="text" />
+                        <input 
+                            value={userMessage} 
+                            onChange={event => setUserMessage(event.target.value)} 
+                            placeholder="Type mensage." 
+                            type="text" 
+                        />
 
-                        <img src={ImgEnter} alt="Img Enter" />
+                        <img onClick={() => enviarMensagem(userMessage)} src={ImgEnter} alt="Img Enter"/>
 
                     </div>
 

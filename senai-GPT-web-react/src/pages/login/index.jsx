@@ -30,13 +30,16 @@ function Login() {
 
       console.log(response)
 
-      let json = await response.json()
+      let json = await response.json();
+
       let token = json.accessToken;
+      let userId = json.user.id;
 
       console.log("token: " + token)
 
       //  LOCALSTORAGE:
       localStorage.setItem("meuToken", token)
+      localStorage.setItem("meuId", userId)
 
       //  COOKIES:
       // function setCookie(name, value, days) {

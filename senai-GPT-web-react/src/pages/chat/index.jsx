@@ -15,6 +15,7 @@ import IconImagem from "../../assets/imgs/Vector (1).svg";
 import ImgEnter from "../../assets/imgs/Vector (2).svg";
 import { useEffect, useState } from "react";
 
+
 function Chat() {
 
     const [chats, setChats] = useState([]);
@@ -103,62 +104,122 @@ function Chat() {
 
     }
 
-    const enviarMensagem = async (message) => {
 
-       
-
-        console.log("message: ", message)
-
-        let userId = localStorage.getItem("meuId");
-
-        let novaMensagemUsuario = {
-
-            text: message,
-            id: crypto.randomUUID(),
-            userId: userId
-        };
-
-        let respostaGPT = await chatGPT (message);
-        console.log("resposta", respostaGPT)
-
-        let novaMensagemChatGpt = {
-            userId: "chatbot",
-            text: respostaGPT,
-            id: crypto.randomUUID()
-        };
-
-        let novoChatSelecionado = { ...chatSelecionado };
-
-        novoChatSelecionado.messages.push(novaMensagemUsuario);
-        novoChatSelecionado.messages.push(novaMensagemChatGpt);
-
-        setChatSelecionado(novoChatSelecionado);
+}
+const enviarMensagem = async (message) => {
 
 
-         // let resposta = await chatGPT(message);
 
-        // console.log("resposta: ", resposta)
+    console.log("message: ", message)
 
-        // let novaMensagemUsuairo = {
+    let userId = localStorage.getItem("meuId");
 
-        //     userId: "userId",
-        //     text: message,
-        //     id: 10
-        // };
+    let novaMensagemUsuario = {
 
-        // let novaRespostaChatGPT = {
-        //     userId: "chatbot",
-        //     text: resposta,
-        //     id: 10
-        // };
+        text: message,
+        id: crypto.randomUUID(),
+        userId: userId
+    };
 
-        // let novoChatSelecionado = { ...chatSelecionado };
+    let respostaGPT = await chatGPT(message);
+    console.log("resposta", respostaGPT)
 
-        // novoChatSelecionado.messages.push(novaMensagemUsuairo);
-        // novoChatSelecionado.messages.push(novaRespostaChatGPT);
+    let novaMensagemChatGpt = {
+        userId: "chatbot",
+        text: respostaGPT,
+        id: crypto.randomUUID()
+    };
 
-        // setChatSelecionado(novoChatSelecionado);
+    let novoChatSelecionado = { ...chatSelecionado };
+
+    novoChatSelecionado.messages.push(novaMensagemUsuario);
+    novoChatSelecionado.messages.push(novaMensagemChatGpt);
+
+    setChatSelecionado(novoChatSelecionado);
+
+
+    // let resposta = await chatGPT(message);
+
+    // console.log("resposta: ", resposta)
+
+    // let novaMensagemUsuairo = {
+
+    //     userId: "userId",
+    //     text: message,
+    //     id: 10
+    // };
+
+    // let novaRespostaChatGPT = {
+    //     userId: "chatbot",
+    //     text: resposta,
+    //     id: 10
+    // };
+
+    // let novoChatSelecionado = { ...chatSelecionado };
+
+    // novoChatSelecionado.messages.push(novaMensagemUsuairo);
+    // novoChatSelecionado.messages.push(novaRespostaChatGPT);
+
+    // setChatSelecionado(novoChatSelecionado);
+
+    let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats/" + chatSelecionado.id, {
+        method: "PUT",
+        headers: {
+            "authorization": "Bearer " + localStorage.getItem("meuToken"),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+            novoChatSelecionado
+        )
+    });
+
+    if (response.ok == false) {
+
+        console.log("Salvamento deu erro");
+
     }
+
+    const novoChat = async () => {
+
+        let novoTitulo = prompt("Titulo do Novo Chat:");
+        if (novoTitulo == null || novoTitulo == "")
+
+            alert("Insira um titulo:");
+        return; //faz o codigo parar de ser executado.
+
+    }
+
+    //pega o ID do usuario logado
+    let userId = localStorage.getItem("meuId");
+
+    let nChat = {
+
+        chatTitle: novoTitulo,
+        id: crypto.getRandomValues(),
+        userId: userId,
+        message: []
+    }
+
+    let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats", {
+        method: "POST",
+        headers: {
+            "authorization": "Bearer " + localStorage.getItem("meuToken"),
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(
+            nChat
+        )
+    });
+
+    if (response.ok) {
+
+        //atualiza os chats na tela
+        await getChats();
+
+    }
+
+
 
     return (
         <>
@@ -169,7 +230,10 @@ function Chat() {
 
                     <div className="top">
 
-                        <button className="new-chat">+ New chat</button>
+
+
+                        { }
+                        <button className="new-chat" onClick={() novoChat => () }>+ New chat</button>
 
                         {chats.map(chat => (
                             <button className="bnt-chat" onClick={() => clickChat(chat)} >
@@ -297,11 +361,8 @@ function Chat() {
                             value={userMessage}
                             onChange={event => setUserMessage(event.target.value)}
                             placeholder="Type mensage."
-                            type="text"
-                        />
-
-                        <img onClick={() => enviarMensagem(userMessage)} src={ImgEnter} alt="Img Enter" />
-
+                            type="text" />
+                             <img onClick={() => enviarMensagem(userMessage)} src={ImgEnter} alt="Img Enter" />
                     </div>
 
                 </main>

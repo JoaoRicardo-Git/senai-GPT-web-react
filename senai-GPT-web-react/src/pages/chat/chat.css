@@ -84,7 +84,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
+    overflow: auto;
 
 }
 
@@ -116,7 +116,8 @@
 
 .top button:nth-child(n+2):hover {
 
-    background-color: antiquewhite;
+    background-color: black;
+    color: white;
 
 }
 
@@ -147,7 +148,8 @@
 
 .left-panel button:hover {
 
-    background-color: antiquewhite;
+    background-color: rgb(15, 15, 14);
+    color: white;
 
 }
 
@@ -195,6 +197,8 @@ input {
     padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
+    height: 90vh;
+    overflow: auto;
 
 }
 

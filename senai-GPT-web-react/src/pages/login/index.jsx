@@ -7,9 +7,15 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const onCadastraClick = async () => {
+
+    window.location.href = "/new-user";
+  }
+
   const onLoginClick = async () => {
 
-    let response = await fetch("https://senai-gpt-api.azurewebsites.net/login", {
+    let response = await fetch("https://senai-gpt-api.up.railway.app/login", {
 
       headers: {
         "Content-Type": "application/json"
@@ -91,6 +97,8 @@ function Login() {
           <input className="inpt" value={password} onChange={event => setPassword(event.target.value)} type="password" placeholder="Insira uma Senha" />
 
           <button className="btn" onClick={() => onLoginClick()}>Entrar</button>
+
+          <button className="sbtn" onClick={() => onCadastraClick()}>Cadastra</button>
 
         </div>
 

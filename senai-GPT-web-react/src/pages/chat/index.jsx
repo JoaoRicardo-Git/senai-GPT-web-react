@@ -31,7 +31,7 @@ function Chat() {
 
     const getChats = async () => {
         //Arrow Function
-        let response = await fetch("https://senai-gpt-api.azurewebsites.net/Chats", {
+        let response = await fetch("https://senai-gpt-api.up.railway.app/users", {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("meuToken")
             }
@@ -42,12 +42,15 @@ function Chat() {
         if (response.ok == true) {
 
             let json = await response.json(); // Pega as informacoes dos chats.
+            let userId = localStorage.getItem("meuId");
+            json = json.filter(chat => chat.userId == userId);
 
             setChats(json);
 
         } else {
 
             alert("Token invalido. Faca login novamente.")
+            localStorage.clear();
             window.location.href = "/login";
 
         }
@@ -67,7 +70,8 @@ function Chat() {
     }
 
     const chatGPT = async (message) => {
-
+        
+        return "[Inutilizado por tempo determinado]"
         // Configurações do endpoint e chave da API
         const endpoint = "https://ai-testenpl826117277026.openai.azure.com/";
         const apiKey = "DCYQGY3kPmZXr0lh7xeCSEOQ5oiy1aMlN1GeEQd5G5cXjuLWorWOJQQJ99BCACYeBjFXJ3w3AAAAACOGol8N";
@@ -104,122 +108,124 @@ function Chat() {
 
     }
 
-
-}
-const enviarMensagem = async (message) => {
+    const enviarMensagem = async (message) => {
 
 
 
-    console.log("message: ", message)
+        console.log("message: ", message)
 
-    let userId = localStorage.getItem("meuId");
+        let userId = localStorage.getItem("meuId");
 
-    let novaMensagemUsuario = {
+        let novaMensagemUsuario = {
 
-        text: message,
-        id: crypto.randomUUID(),
-        userId: userId
+            text: message,
+            id: crypto.randomUUID(),
+            userId: userId
+        };
+
+        let respostaGPT = await chatGPT(message);
+        console.log("resposta", respostaGPT)
+
+        let novaMensagemChatGpt = {
+            userId: "chatbot",
+            text: respostaGPT,
+            id: crypto.randomUUID()
+        };
+
+        let novoChatSelecionado = { ...chatSelecionado };
+
+        novoChatSelecionado.messages.push(novaMensagemUsuario);
+        novoChatSelecionado.messages.push(novaMensagemChatGpt);
+
+        setChatSelecionado(novoChatSelecionado);
+
+
+        // let resposta = await chatGPT(message);
+
+        // console.log("resposta: ", resposta)
+
+        // let novaMensagemUsuairo = {
+
+        //     userId: "userId",
+        //     text: message,
+        //     id: 10
+        // };
+
+        // let novaRespostaChatGPT = {
+        //     userId: "chatbot",
+        //     text: resposta,
+        //     id: 10
+        // };
+
+        // let novoChatSelecionado = { ...chatSelecionado };
+
+        // novoChatSelecionado.messages.push(novaMensagemUsuairo);
+        // novoChatSelecionado.messages.push(novaRespostaChatGPT);
+
+        // setChatSelecionado(novoChatSelecionado);
+
+        let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats/" + chatSelecionado.id, {
+            method: "PUT",
+            headers: {
+                "authorization": "Bearer " + localStorage.getItem("meuToken"),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+                novoChatSelecionado
+            )
+        });
+
+        if (response.ok == false) {
+
+            console.log("Salvamento deu erro");
+
+        }
+
+
+
+
+
     };
-
-    let respostaGPT = await chatGPT(message);
-    console.log("resposta", respostaGPT)
-
-    let novaMensagemChatGpt = {
-        userId: "chatbot",
-        text: respostaGPT,
-        id: crypto.randomUUID()
-    };
-
-    let novoChatSelecionado = { ...chatSelecionado };
-
-    novoChatSelecionado.messages.push(novaMensagemUsuario);
-    novoChatSelecionado.messages.push(novaMensagemChatGpt);
-
-    setChatSelecionado(novoChatSelecionado);
-
-
-    // let resposta = await chatGPT(message);
-
-    // console.log("resposta: ", resposta)
-
-    // let novaMensagemUsuairo = {
-
-    //     userId: "userId",
-    //     text: message,
-    //     id: 10
-    // };
-
-    // let novaRespostaChatGPT = {
-    //     userId: "chatbot",
-    //     text: resposta,
-    //     id: 10
-    // };
-
-    // let novoChatSelecionado = { ...chatSelecionado };
-
-    // novoChatSelecionado.messages.push(novaMensagemUsuairo);
-    // novoChatSelecionado.messages.push(novaRespostaChatGPT);
-
-    // setChatSelecionado(novoChatSelecionado);
-
-    let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats/" + chatSelecionado.id, {
-        method: "PUT",
-        headers: {
-            "authorization": "Bearer " + localStorage.getItem("meuToken"),
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(
-            novoChatSelecionado
-        )
-    });
-
-    if (response.ok == false) {
-
-        console.log("Salvamento deu erro");
-
-    }
 
     const novoChat = async () => {
 
         let novoTitulo = prompt("Titulo do Novo Chat:");
-        if (novoTitulo == null || novoTitulo == "")
-
+        if (novoTitulo == null || novoTitulo == "") {
             alert("Insira um titulo:");
-        return; //faz o codigo parar de ser executado.
+            return;
+        }
+
+        //pega o ID do usuario logado
+        let userId = localStorage.getItem("meuId");
+
+        let nChat = {
+
+            chatTitle: novoTitulo,
+            id: crypto.getRandomValues(),
+            userId: userId,
+            message: []
+        }
+
+        let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats", {
+            method: "POST",
+            headers: {
+                "authorization": "Bearer " + localStorage.getItem("meuToken"),
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(
+                nChat
+            )
+        });
+
+        if (response.ok) {
+
+            //atualiza os chats na tela
+            await getChats();
+
+        }
 
     }
-
-    //pega o ID do usuario logado
-    let userId = localStorage.getItem("meuId");
-
-    let nChat = {
-
-        chatTitle: novoTitulo,
-        id: crypto.getRandomValues(),
-        userId: userId,
-        message: []
-    }
-
-    let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats", {
-        method: "POST",
-        headers: {
-            "authorization": "Bearer " + localStorage.getItem("meuToken"),
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(
-            nChat
-        )
-    });
-
-    if (response.ok) {
-
-        //atualiza os chats na tela
-        await getChats();
-
-    }
-
-
 
     return (
         <>
@@ -233,7 +239,7 @@ const enviarMensagem = async (message) => {
 
 
                         { }
-                        <button className="new-chat" onClick={() novoChat => () }>+ New chat</button>
+                        <button className="new-chat" onClick={() => novoChat()}>+ New chat</button>
 
                         {chats.map(chat => (
                             <button className="bnt-chat" onClick={() => clickChat(chat)} >
@@ -362,7 +368,7 @@ const enviarMensagem = async (message) => {
                             onChange={event => setUserMessage(event.target.value)}
                             placeholder="Type mensage."
                             type="text" />
-                             <img onClick={() => enviarMensagem(userMessage)} src={ImgEnter} alt="Img Enter" />
+                        <img onClick={() => enviarMensagem(userMessage)} src={ImgEnter} alt="Img Enter" />
                     </div>
 
                 </main>
@@ -373,6 +379,6 @@ const enviarMensagem = async (message) => {
 
     )
 
-};
+}
 
 export default Chat;

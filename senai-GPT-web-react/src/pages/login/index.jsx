@@ -76,11 +76,7 @@ function Login() {
   }
 
   return (
-    <>
-
-      <hearder>
-
-      </hearder>
+    <> 
 
       <main className="page-container">
 

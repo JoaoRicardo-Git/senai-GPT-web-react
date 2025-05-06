@@ -20,8 +20,9 @@ function Chat() {
 
     const [chats, setChats] = useState([]);
     const [chatSelecionado, setChatSelecionado] = useState(null);
-
     const [userMessage, setUserMessage] = useState("");
+
+    const [isleftPanelOpen, setIsLeftPanelOpen] = useState(false);
 
     useEffect(() => {
         // Executada toda vez que abre a tela.
@@ -201,7 +202,7 @@ function Chat() {
         let nChat = {
 
             chatTitle: novoTitulo,
-            id: crypto.getRandomValues(),
+            id: crypto.ramdomUUID(),
             userId: userId,
             message: []
         }
@@ -231,8 +232,14 @@ function Chat() {
         <>
 
             <div className="container">
+                {/* Toggle Button */}
+                <button className="btn-toggle-panel"
+                onClick={() => setIsLeftPanelOpen(true)}
+                >
+                    ☰
+                </button>
 
-                <header className="left-panel">
+                <header className={`left-panel ${isleftPanelOpen == true ? "open" : ""}`}>
 
                     <div className="top">
 

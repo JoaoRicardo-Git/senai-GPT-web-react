@@ -39,9 +39,12 @@ h1 {
     padding: 18px;
     background-color: black;
     color: white;
-    border: none; /*altura*/
-    width: 377px; /*largura*/
-    border-radius: 10px; /* Arredonda as bordas */
+    border: none;
+    /*altura*/
+    width: 377px;
+    /*largura*/
+    border-radius: 10px;
+    /* Arredonda as bordas */
     cursor: pointer;
 }
 
@@ -70,6 +73,44 @@ h1 {
     width: 50vw;
     height: 100vh;
 }
+
 /* #meutitulo { */
 /* font-size: 76px; */
 /* } */
+
+.sbtn {
+
+    margin-top: 15px;
+
+}
+
+@media screen and (max-width: 768px) {
+
+    /* Celular */
+
+    .robo-image {
+
+        display: none;
+    }
+
+    .Login-container {
+
+        width: 100vw !important;
+
+    }
+
+
+
+}
+
+@media screen and (max-width: 1000px) {
+
+    /* Tablet */
+
+}
+
+@media screen and (max-width: 1366px) {
+
+    /* Desktop Pequeno */
+
+}

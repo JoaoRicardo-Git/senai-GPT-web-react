@@ -73,3 +73,20 @@ h1 {
 /* #meutitulo { */
 /* font-size: 76px; */
 /* } */
+
+@media screen and (max-width: 768px) {
+
+    /* Celular */
+
+    .robo-image {
+
+        display: none;
+    }
+
+    .Login-container {
+
+        width: 100vw !important;
+
+    }
+
+}

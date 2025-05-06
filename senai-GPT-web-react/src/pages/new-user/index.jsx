@@ -12,10 +12,16 @@ function Login() {
 
     const onLoginClick = async () => {
 
-        window.Location.href = "/Login"
+        window.location.href = "/Login";
+
     }
 
     const onCadastraClick = async () => {
+
+        if (usuario == ``) {
+            alert(`sua conta e falsa`)
+            return
+        }
 
         let response = await fetch("https://senai-gpt-api.up.railway.app/users", {
 
@@ -34,21 +40,19 @@ function Login() {
 
         console.log(response);
 
-        if (response.ok) {
+        if (response.ok == true) {
 
             alert("Cadastro Realizado com Sucesso!")
 
             window.location.href = "/Login";
 
-        } 
+        }
+
+    
     }
 
     return (
         <>
-
-            <hearder>
-
-            </hearder>
 
             <main className="page-container">
 
@@ -67,7 +71,7 @@ function Login() {
                     <input className="inpt" value={newPassword} onChange={event => setnewPassword(event.target.value)} type="newPassword" placeholder="Insira a Mesma Senha" />
                     
                     <button className="btn" onClick={() => onCadastraClick()}>Cadastra</button>
-                    <button className="sbtn" onClick={() => onLoginClick()}>Entrar</button>
+                    <button className="sbtn" onClick={() => onLoginClick()}>Ja tenho conta</button>
 
 
                 </div>

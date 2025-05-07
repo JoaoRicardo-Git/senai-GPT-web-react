@@ -32,7 +32,7 @@ function Chat() {
 
     const getChats = async () => {
         //Arrow Function
-        let response = await fetch("https://senai-gpt-api.up.railway.app/users", {
+        let response = await fetch("https://senai-gpt-api.up.railway.app/chats", {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("meuToken")
             }
@@ -66,6 +66,7 @@ function Chat() {
     }
 
     const clickChat = (chat) => {
+
         setChatSelecionado(chat);
         console.log(chat)
     }
@@ -202,12 +203,12 @@ function Chat() {
         let nChat = {
 
             chatTitle: novoTitulo,
-            id: crypto.ramdomUUID(),
+            id: crypto.randomUUID(),
             userId: userId,
             message: []
         }
 
-        let response = await fetch("https://senai-gpt-api.azurewebsites.net/chats", {
+        let response = await fetch("https://senai-gpt-api.up.railway.app/chats", {
             method: "POST",
             headers: {
                 "authorization": "Bearer " + localStorage.getItem("meuToken"),
@@ -234,7 +235,7 @@ function Chat() {
             <div className="container">
                 {/* Toggle Button */}
                 <button className="btn-toggle-panel"
-                onClick={() => setIsLeftPanelOpen(true)}
+                onClick={() => setIsLeftPanelOpen(!isleftPanelOpen)}
                 >
                     ☰
                 </button>
@@ -352,8 +353,8 @@ function Chat() {
 
                                 <div className="chat-messages">
 
-                                    {chatSelecionado.messages.map(message => (
-                                        <p className={"message-item " + (message.userId == "chatbot" ? "chatbot" : "")} >{message.text}</p>
+                                    {chatSelecionado.messages?.map((message) => (
+                                        <p className={"message-item " + (message.userId == "chatbot" ? "chatbot" : "")} > {message.text}{" "}</p>
                                     ))}
 
                                 </div>

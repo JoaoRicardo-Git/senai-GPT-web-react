@@ -1,11 +1,23 @@
 import "./chat.css"
 
 import ChatText from "../../assets/imgs/ChatText.svg";
+import ChatTextWhite from "../../assets/imgs/IconSet-white.svg";
+
 import Trash from "../../assets/imgs/Trash.svg";
+import TrashWhite from "../../assets/imgs/Trash-White.svg";
+
 import Sun from "../../assets/imgs/Sun.svg";
+import SunWhite from "../../assets/imgs/Sun-White.svg";
+
 import User from "../../assets/imgs/User.svg";
+import UserWhite from "../../assets/imgs/User-White.svg";
+
 import ArrowImg from "../../assets/imgs/ArrowSquareOut.svg";
+import ArrowImgWhite from "../../assets/imgs/ArrowSquareOut-White.svg";
+
 import ExitImg from "../../assets/imgs/Vector.svg";
+import ExitImgWhite from "../../assets/imgs/Exit-White.svg";
+
 import Logo from "../../assets/imgs/Chat.png";
 import Examples from "../../assets/imgs/Vector (3).svg";
 import Capabiliti from "../../assets/imgs/Star.svg";
@@ -24,18 +36,30 @@ function Chat() {
 
     const [isleftPanelOpen, setIsLeftPanelOpen] = useState(false);
 
+    const [darkMode, setDarkMode] = useState(false);
+
     useEffect(() => {
+
         // Executada toda vez que abre a tela.
         getChats();
+
+        // Verifica se o modo escuro esta ativo.
+        let modoEscuro = localStorage.getItem("darkMode");
+        if (modoEscuro === "true") {
+            setDarkMode(true);
+            document.body.classList.add("dark-mode");
+        }
 
     }, []);
 
     const getChats = async () => {
+
         //Arrow Function
         let response = await fetch("https://senai-gpt-api.up.railway.app/chats", {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("meuToken")
             }
+
         });
 
         console.log(response);
@@ -69,6 +93,7 @@ function Chat() {
 
         setChatSelecionado(chat);
         console.log(chat)
+
     }
 
     const chatGPT = async (message) => {
@@ -111,8 +136,6 @@ function Chat() {
     }
 
     const enviarMensagem = async (message) => {
-
-
 
         console.log("message: ", message)
 
@@ -183,11 +206,7 @@ function Chat() {
 
         }
 
-
-
-
-
-    };
+    }
 
     const novoChat = async () => {
 
@@ -229,6 +248,24 @@ function Chat() {
 
     }
 
+    const toggleDarkMode = async () => {
+
+        setDarkMode(!darkMode); // Inverte o valor do dack mode.
+
+        if (darkMode == true) {
+
+            document.body.classList.remove("dark-mode");
+
+        } else {
+
+            document.body.classList.add("dark-mode");
+
+        }
+
+        localStorage.setItem("dark-mode", !darkMode);
+
+    }
+
     return (
         <>
 
@@ -244,14 +281,11 @@ function Chat() {
 
                     <div className="top">
 
-
-
-                        { }
                         <button className="new-chat" onClick={() => novoChat()}>+ New chat</button>
 
                         {chats.map(chat => (
-                            <button className="bnt-chat" onClick={() => clickChat(chat)} >
-                                <img src={ChatText} alt="Balao de texto" />
+                            <button className="bnt-chat" onClick={() => clickChat(chat)}>
+                                <img src={darkMode == true? ChatTextWhite : ChatText} alt="Balao de texto"/>
                                 {chat.chatTitle}
                             </button>
                         ))}
@@ -261,23 +295,23 @@ function Chat() {
                     <div className="bottom">
 
                         <button className="input-conteiner">
-                            <img src={Trash} alt="img Lixo" />
+                            <img src={darkMode == true? TrashWhite : Trash} alt="img Lixo" />
                             Clear conversations
                         </button>
-                        <button className="input-conteiner">
-                            <img src={Sun} alt="img sol" />
+                        <button className="input-conteiner" onClick={() => toggleDarkMode()}>
+                            <img src={darkMode == true? SunWhite : Sun} alt="img sol" />
                             Light mode
                         </button>
                         <button className="input-conteiner">
-                            <img src={User} alt="img person" />
+                            <img src={darkMode == true? UserWhite : User} alt="img person" />
                             My  account
                         </button>
                         <button className="input-conteiner">
-                            <img src={ArrowImg} alt="img arrow" />
+                            <img src={darkMode == true? ArrowImgWhite : ArrowImg} alt="img arrow" />
                             Updates & FAQ
                         </button>
                         <button className="input-conteiner" onClick={() => onLogOutClick()}>
-                            <img src={ExitImg} alt="img Sair" />
+                            <img src={darkMode == true? ExitImgWhite : ExitImg} alt="img Sair" />
                             Log out
                         </button>
 

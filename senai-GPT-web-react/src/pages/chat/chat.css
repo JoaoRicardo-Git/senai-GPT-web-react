@@ -114,12 +114,6 @@
 
 }
 
-.top button:nth-child(n+2):hover {
-
-    background-color: black;
-    color: white;
-
-}
 
 .bottom {
 
@@ -143,13 +137,6 @@
     font-size: 16px;
     cursor: pointer;
     
-
-}
-
-.left-panel button:hover {
-
-    background-color: rgb(15, 15, 14);
-    color: white;
 
 }
 
@@ -281,5 +268,24 @@ input {
 
         background-color: white;
     }
+
+}
+
+body.dark-mode .left-panel {
+
+    background-color: black !important;
+    
+
+}
+
+body.dark-mode .left-panel button {
+
+    color: white !important;
+
+}
+
+body.dark-mode .left-panel .top button {
+
+    color: white;
 
 }
